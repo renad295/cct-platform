@@ -53,6 +53,7 @@ export default function EditModal({
                   { label: "Job Title", name: "job_title" },
                   { label: "Company Name", name: "company_name" },
                   { label: "Phone", name: "client_phone" },
+                  { label: "Other Phone", name: "other_phone" },
                   { label: "Email", name: "client_email" },
                 ].map((f, i) => (
                   <div key={i}>

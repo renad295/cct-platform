@@ -24,6 +24,7 @@ export default function ViewModal({ client, files, history, onClose }) {
                 { label: "Job Title", value: client.job_title || "-" },
                 { label: "Company", value: client.company_name },
                 { label: "Phone", value: client.client_phone || "-" },
+                { label: "Other Phone", value: client.other_phone || "-" }, 
                 { label: "Email", value: client.client_email || "-" },
                 { label: "Status", value: client.status },
                 { label: "Assigned To", value: client.assigned_to || "-" },

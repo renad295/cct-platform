@@ -10,6 +10,7 @@ const CCT_FIELDS = [
   { key: "job_title", label: "Job Title", required: false },
   { key: "company_name", label: "Company Name", required: true },
   { key: "client_phone", label: "Phone", required: false },
+  { key: "other_phone", label: "Other Phone", required: false },
   { key: "client_email", label: "Email", required: false },
   { key: "industry", label: "Industry", required: false },
   { key: "notes", label: "Notes", required: false },
