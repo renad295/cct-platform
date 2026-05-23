@@ -347,7 +347,7 @@ export default function Dashboard() {
     { label: "Existing Clients", value: filtered.filter(c => c.status === "Existing Client").length, color: "#7c3aed" },
   ]
 
-  const filters = ["All", "New", "Meeting Arranged", "Opportunity", "No Answer", "Not Interested", "Existing Client"]
+  const filters = ["All", "New","Call Back", "Meeting Arranged", "Opportunity", "No Answer", "Not Interested", "Existing Client"]
 
   return (
     <div className="flex h-screen bg-gray-50">

@@ -67,6 +67,7 @@ export default function EditModal({
                   <select name="status" value={editedClient?.status || "New"} onChange={handleChange}
                     className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900 outline-none focus:border-red-700 focus:ring-1 focus:ring-red-200">
                     <option>New</option>
+                    <option>Call Back</option>
                     <option>Meeting Arranged</option>
                     <option>Opportunity</option>
                     <option>No Answer</option>
