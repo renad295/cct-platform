@@ -8,6 +8,17 @@ export default function EditModal({
 }) {
   if (!client) return null
 
+  const industries = [
+    "Technology", "Healthcare", "Finance", "Education",
+    "Real Estate", "Retail", "Manufacturing", "Government", "Other"
+  ]
+
+  // normalize industry value للمقارنة
+  const normalizeIndustry = (val) => {
+    if (!val) return ""
+    return industries.find(i => i.toLowerCase() === val.toLowerCase()) || val
+  }
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -66,18 +77,15 @@ export default function EditModal({
 
                 <div>
                   <label className="block text-xs text-gray-400 mb-1">Industry</label>
-                  <select name="industry" value={editedClient?.industry || ""} onChange={handleChange}
+                  <select
+                    name="industry"
+                    value={normalizeIndustry(editedClient?.industry)}
+                    onChange={handleChange}
                     className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900 outline-none focus:border-red-700 focus:ring-1 focus:ring-red-200">
                     <option value="">— Select Industry —</option>
-                    <option>Technology</option>
-                    <option>Healthcare</option>
-                    <option>Finance</option>
-                    <option>Education</option>
-                    <option>Real Estate</option>
-                    <option>Retail</option>
-                    <option>Manufacturing</option>
-                    <option>Government</option>
-                    <option>Other</option>
+                    {industries.map(ind => (
+                      <option key={ind} value={ind}>{ind}</option>
+                    ))}
                   </select>
                 </div>
               </div>

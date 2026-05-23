@@ -6,7 +6,8 @@ export default function Filters({
   dateTo, setDateTo,
   allUsers, allAssigned,
   filteredCount,
-  onReset
+  onReset,
+  search, setSearch
 }) {
   return (
     <>
@@ -22,6 +23,14 @@ export default function Filters({
 
       {/* Advanced Filters */}
       <div className="bg-white rounded-xl border border-gray-100 px-4 py-3 mb-4 flex items-center gap-3 flex-wrap">
+        <input
+          type="text"
+          placeholder="🔍 Search name, company, phone..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-700 outline-none focus:border-red-700 w-56"
+        />
+
         <select value={userFilter} onChange={(e) => setUserFilter(e.target.value)}
           className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-700 outline-none focus:border-red-700">
           <option value="All">Updated By</option>

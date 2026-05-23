@@ -19,13 +19,13 @@ export default function ClientTable({ clients, loading, onView, onEdit }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gray-100 bg-gray-50">
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Client</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Job Title</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Company</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Phone</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Status</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Assigned To</th>
-            <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Updated by</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Client</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Job Title</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Company</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Phone</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Status</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Assigned To</th>
+            <th className="text-left px-4 py-3 text-xs text-gray-400 font-normal">Updated by</th>
             <th className="px-4 py-3"></th>
           </tr>
         </thead>

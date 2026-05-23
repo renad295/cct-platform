@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [assignedFilter, setAssignedFilter] = useState("All")
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
+  const [search, setSearch] = useState("")
   const [selectedClient, setSelectedClient] = useState(null)
   const [editedClient, setEditedClient] = useState(null)
   const [viewClient, setViewClient] = useState(null)
@@ -324,6 +325,10 @@ export default function Dashboard() {
     const statusMatch = filter === "All" || c.status === filter
     const userMatch = userFilter === "All" || c.updated_by === userFilter
     const assignedMatch = assignedFilter === "All" || c.assigned_to === assignedFilter
+    const searchMatch = search === "" ||
+      c.client_name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.company_name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.client_phone?.includes(search)
     const dateMatch = (() => {
       if (!dateFrom && !dateTo) return true
       const updated = new Date(c.updated_at)
@@ -332,7 +337,7 @@ export default function Dashboard() {
       if (dateTo) return updated <= new Date(dateTo + "T23:59:59")
       return true
     })()
-    return statusMatch && userMatch && assignedMatch && dateMatch
+    return statusMatch && userMatch && assignedMatch && searchMatch && dateMatch
   })
 
   const stats = [
@@ -381,7 +386,8 @@ export default function Dashboard() {
             dateTo={dateTo} setDateTo={setDateTo}
             allUsers={allUsers} allAssigned={allAssigned}
             filteredCount={filtered.length}
-            onReset={() => { setFilter("All"); setUserFilter("All"); setAssignedFilter("All"); setDateFrom(""); setDateTo("") }}
+            search={search} setSearch={setSearch}
+            onReset={() => { setFilter("All"); setUserFilter("All"); setAssignedFilter("All"); setDateFrom(""); setDateTo(""); setSearch("") }}
           />
 
           <ClientTable
