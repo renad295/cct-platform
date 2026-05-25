@@ -38,12 +38,12 @@ export default function Invitations() {
     setEmailError("")
     setSending(true)
 
-    const domain = email.split("@")[1]
+  /* const domain = email.split("@")[1]
     if (domain !== "smart.sa") {
       setEmailError("Email must be @smart.sa")
       setSending(false)
       return
-    }
+    }*/
 
     const res = await fetch("/api/invite", {
       method: "POST",
