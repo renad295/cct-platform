@@ -7,7 +7,6 @@ import { ArrowLeft, UserPlus, Trash2 } from "lucide-react"
 export default function Invitations() {
   const [invitations, setInvitations] = useState([])
   const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
   const [user, setUser] = useState(null)
@@ -48,7 +47,7 @@ export default function Invitations() {
     const res = await fetch("/api/invite", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, name }),
+      body: JSON.stringify({ email }),
     })
 
     const data = await res.json()
@@ -61,7 +60,6 @@ export default function Invitations() {
       }
     } else {
       setEmail("")
-      setName("")
       fetchUsers()
       setSuccessMsg("Invitation sent successfully!")
       setTimeout(() => setSuccessMsg(""), 3000)
@@ -94,16 +92,7 @@ export default function Invitations() {
           <h1 className="text-lg font-semibold text-gray-900 mb-6">Invite Team Member</h1>
 
           <form onSubmit={handleInvite} className="space-y-4">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Full Name</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Ahmed Khalid"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-900 outline-none focus:border-red-700 focus:ring-1 focus:ring-red-200"
-              />
-            </div>
+            
             <div>
               <label className="block text-xs text-gray-400 mb-1">Company Email</label>
               <input
