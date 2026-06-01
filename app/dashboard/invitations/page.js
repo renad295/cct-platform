@@ -12,6 +12,7 @@ export default function Invitations() {
   const [user, setUser] = useState(null)
   const [successMsg, setSuccessMsg] = useState("")
   const [emailError, setEmailError] = useState("")
+  const [confirmDelete, setConfirmDelete] = useState(null)
 
   const router = useRouter()
 
@@ -37,13 +38,6 @@ export default function Invitations() {
     setEmailError("")
     setSending(true)
 
-  /* const domain = email.split("@")[1]
-    if (domain !== "smart.sa") {
-      setEmailError("Email must be @smart.sa")
-      setSending(false)
-      return
-    }*/
-
     const res = await fetch("/api/invite", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -67,15 +61,15 @@ export default function Invitations() {
     setSending(false)
   }
 
-  const handleDelete = async (userId) => {
-    if (!confirm("Are you sure you want to remove this user?")) return
+  const handleDelete = async () => {
     const res = await fetch("/api/invite", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ userId: confirmDelete.id }),
     })
     const data = await res.json()
     if (!data.error) fetchUsers()
+    setConfirmDelete(null)
   }
 
   return (
@@ -92,7 +86,6 @@ export default function Invitations() {
           <h1 className="text-lg font-semibold text-gray-900 mb-6">Invite Team Member</h1>
 
           <form onSubmit={handleInvite} className="space-y-4">
-            
             <div>
               <label className="block text-xs text-gray-400 mb-1">Company Email</label>
               <input
@@ -106,9 +99,9 @@ export default function Invitations() {
               {emailError && <p className="text-xs text-red-600 mt-1">{emailError}</p>}
             </div>
             {successMsg && (
-            <div className="flex items-center gap-2 bg-green-50 text-green-700 text-xs px-4 py-3 rounded-xl">
+              <div className="flex items-center gap-2 bg-green-50 text-green-700 text-xs px-4 py-3 rounded-xl">
                 ✅ {successMsg}
-            </div>
+              </div>
             )}
             <button
               type="submit"
@@ -145,7 +138,7 @@ export default function Invitations() {
                       {u.confirmed_at ? "Active" : "Pending"}
                     </span>
                     {u.email !== user?.email && (
-                      <button onClick={() => handleDelete(u.id)} className="text-gray-300 hover:text-red-600 transition">
+                      <button onClick={() => setConfirmDelete(u)} className="text-gray-300 hover:text-red-600 transition">
                         <Trash2 size={15} />
                       </button>
                     )}
@@ -156,6 +149,29 @@ export default function Invitations() {
           )}
         </div>
       </div>
+
+      {/* Confirm Delete Modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-80 shadow-xl">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">Remove Team Member</h3>
+            <p className="text-xs text-gray-500 mb-1">Are you sure you want to remove:</p>
+            <p className="text-xs font-semibold text-gray-800 mb-5">{confirmDelete.email}</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="flex-1 py-2 rounded-xl border border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition">
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
