@@ -64,7 +64,15 @@ export default function LoginPage() {
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
+
+          <div className="text-right">
+            <a href="/forgot-password" className="text-xs text-gray-400 hover:text-red-700 transition">
+              Forgot password?
+            </a>
+          </div>
+
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
           <button
             type="submit"
             disabled={loading}
@@ -72,6 +80,11 @@ export default function LoginPage() {
           >
             {loading ? "Signing in..." : "Login"}
           </button>
+
+          <p className="text-center text-xs text-gray-400">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-red-700 hover:underline">Sign up</a>
+          </p>
         </form>
       </div>
     </div>

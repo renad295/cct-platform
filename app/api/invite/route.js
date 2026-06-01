@@ -13,10 +13,10 @@ const supabaseAdmin = createClient(
 )
 
 export async function POST(req) {
-  const { email, name } = await req.json()
+  const { email } = await req.json()
 
   const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: name }
+    redirectTo: "https://cct-platform.vercel.app/auth/confirm"
   })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 })
