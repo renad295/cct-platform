@@ -14,20 +14,28 @@ export default function ResetPassword() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    const hash = window.location.hash
-    const params = new URLSearchParams(hash.replace("#", "?"))
-    const accessToken = params.get("access_token")
-    const refreshToken = params.get("refresh_token")
+  const hash = window.location.hash
+  const params = new URLSearchParams(hash.replace("#", "?"))
+  const accessToken = params.get("access_token")
+  const refreshToken = params.get("refresh_token")
+  const type = params.get("type")
 
-    if (accessToken && refreshToken) {
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      }).then(() => setReady(true))
-    } else {
-      setError("Invalid or expired reset link.")
-    }
-  }, [])
+  if (accessToken) {
+    supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken || accessToken,
+    }).then(({ error }) => {
+      if (error) setError(error.message)
+      else setReady(true)
+    })
+  } else {
+    // ممكن Supabase يرسل PKCE بدون hash
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setReady(true)
+      else setError("Invalid or expired reset link.")
+    })
+  }
+}, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
