@@ -13,11 +13,12 @@ export default function ForgotPassword() {
     setError("")
     setLoading(true)
 
-    const res = await fetch("/api/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    })
+const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reset-password`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email }),
+})
+     
 
     const data = await res.json()
 

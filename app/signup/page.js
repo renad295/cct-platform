@@ -48,8 +48,8 @@ export default function SignupPage() {
 
     setLoading(true)
 
-    const checkRes = await fetch(`/api/reset-password?email=${email}`)
-    const checkData = await checkRes.json()
+const checkRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reset-password?email=${email}`)
+const checkData = await checkRes.json()
 
     if (checkData.exists) {
       setError("This email is already registered")

@@ -26,12 +26,12 @@ export default function Invitations() {
     fetchUsers()
   }, [])
 
-  const fetchUsers = async () => {
-    const res = await fetch("/api/invite")
-    const data = await res.json()
-    setInvitations(data.users || [])
-    setLoading(false)
-  }
+const fetchUsers = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`)
+  const data = await res.json()
+  setInvitations(data.users || [])
+  setLoading(false)
+}
 
   const handleInvite = async (e) => {
   e.preventDefault()
@@ -45,7 +45,7 @@ export default function Invitations() {
 
   setSending(true)
 
-  const res = await fetch("/api/invite", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -68,8 +68,7 @@ export default function Invitations() {
     setSending(false)
   }
 
-  const handleDelete = async () => {
-    const res = await fetch("/api/invite", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: confirmDelete.id }),

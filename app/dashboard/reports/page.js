@@ -21,8 +21,8 @@ export default function Reports() {
 
   const fetchData = async () => {
     const { data: clientsData } = await supabase.from("clients").select("*")
-    const res = await fetch("/api/invite")
-    const usersData = await res.json()
+const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`)    
+const usersData = await res.json()
     setClients(clientsData || [])
     setUsers(usersData.users || [])
     setLoading(false)

@@ -87,10 +87,11 @@ export default function Dashboard() {
   }
 
   const fetchUsersData = async () => {
-    const res = await fetch("/api/invite")
-    const data = await res.json()
-    setUsers(data.users || [])
-  }
+const fetchUsersData = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`)
+  const data = await res.json()
+  setUsers(data.users || [])
+}  }
 
   const fetchHistory = async (clientId) => {
     const { data } = await supabase.from("client_history").select("*").eq("client_id", clientId).order("created_at", { ascending: false })
@@ -115,7 +116,7 @@ export default function Dashboard() {
   }
 
   const sendEmailNotification = async (to, subject, message) => {
-    await fetch("/api/send-email", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-email`,  {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ to, subject, message }),
