@@ -99,13 +99,14 @@ Write a performance summary covering: current performance level, key strengths, 
   const totalNoAnswer = clients.filter(c => c.status === "No Answer").length
   const totalExisting = clients.filter(c => c.status === "Existing Client").length
   const totalNew = clients.filter(c => c.status === "New").length
-  const totalConfirmed = clients.filter(c => c.is_confirmed).length
-  const overallMeetingRate = totalClients > 0 ? ((totalMeetings / totalClients) * 100).toFixed(1) : 0
-  const overallSuccessRate = totalClients > 0 ? (((totalMeetings + totalOpportunities) / totalClients) * 100).toFixed(1) : 0
+const totalConfirmed = clients.filter(c => c.is_confirmed).length
+const totalOnHold = clients.filter(c => c.status === "On Hold").length
+const overallMeetingRate = totalClients > 0 ? ((totalMeetings / totalClients) * 100).toFixed(1) : 0
+const overallSuccessRate = totalClients > 0 ? (((totalMeetings + totalOpportunities) / totalClients) * 100).toFixed(1) : 0
 
-  // Pie chart data
-  const pieData = [
-    { name: "New", value: totalNew, color: "#9ca3af" },
+// Pie chart data
+const pieData = [
+  { name: "New", value: totalNew, color: "#9ca3af" },
     { name: "Meeting Arranged", value: totalMeetings, color: "#0C447C" },
       { name: "On Hold", value: totalOnHold, color: "#f9f516" },
     { name: "Opportunity", value: totalOpportunities, color: "#27ae60" },
