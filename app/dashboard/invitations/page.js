@@ -34,11 +34,18 @@ export default function Invitations() {
   }
 
   const handleInvite = async (e) => {
-    e.preventDefault()
-    setEmailError("")
-    setSending(true)
+  e.preventDefault()
+  setEmailError("")
 
-    const res = await fetch("/api/invite", {
+  const domain = email.split("@")[1]
+  if (domain !== "smart.sa") {
+    setEmailError("Email must be @smart.sa")
+    return
+  }
+
+  setSending(true)
+
+  const res = await fetch("/api/invite", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
