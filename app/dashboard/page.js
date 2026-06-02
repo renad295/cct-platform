@@ -358,14 +358,14 @@ export default function Dashboard() {
       {/* Header ثابت */}
       <div className="fixed top-0 left-0 right-0 z-20 bg-gray-50 px-6 py-4 flex justify-between items-center border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="flex flex-col justify-center gap-1.5 p-2">
-            <span className="block h-0.5 w-6 bg-gray-500"></span>
-            <span className="block h-0.5 w-4 bg-gray-500"></span>
-            <span className="block h-0.5 w-5 bg-gray-500"></span>
-          </button>
-          <h1 className="text-lg font-semibold text-gray-900">Clients</h1>
+         <button
+  onClick={() => setSidebarOpen(!sidebarOpen)}
+  className="flex flex-col justify-center gap-1.5 p-2">
+  <span className="block h-0.5 w-6 bg-gray-500"></span>
+  <span className="block h-0.5 w-4 bg-gray-500"></span>
+  <span className="block h-0.5 w-5 bg-gray-500"></span>
+</button>
+<img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-7" />
         </div>
         <div className="flex items-center gap-3">
           <Notifications
@@ -385,7 +385,7 @@ export default function Dashboard() {
 
       {/* Content */}
       <div className="p-6 flex-1 overflow-y-auto mt-16">
-        <StatsCards stats={stats} />
+{/* StatsCards محذوفة */}
         <Filters
           filters={filters}
           filter={filter} setFilter={setFilter}
