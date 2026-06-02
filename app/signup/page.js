@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
-const ACCESS_CODE = "SMART@2007" // غيّره لأي كود تبيه
+const ACCESS_CODE = "SMART@2007"
 
 export default function SignupPage() {
   const [name, setName] = useState("")
@@ -16,22 +16,25 @@ export default function SignupPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
 
+  const domain = email.split("@")[1]
+    if (domain !== "smart.sa") {
+      setError("Domain must be @smart.sa")
+      return
+    }
+
     if (accessCode !== ACCESS_CODE) {
       setError("Invalid access code")
       return
     }
 
-   /* const domain = email.split("@")[1]
-if (domain !== "smart.sa") {
-  setError("Email must be @smart.sa")
-  return
-}*/
+    
 
     if (password !== confirmPassword) {
       setError("Passwords do not match")
@@ -45,6 +48,15 @@ if (domain !== "smart.sa") {
 
     setLoading(true)
 
+    const checkRes = await fetch(`/api/reset-password?email=${email}`)
+    const checkData = await checkRes.json()
+
+    if (checkData.exists) {
+      setError("This email is already registered")
+      setLoading(false)
+      return
+    }
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -57,8 +69,28 @@ if (domain !== "smart.sa") {
       setError(error.message)
       setLoading(false)
     } else {
-      router.push("/dashboard")
+      setSuccess(true)
+      setLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-full max-w-md px-8 py-10 rounded-2xl shadow-lg border border-gray-100 text-center">
+          <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10 mx-auto mb-6" />
+          <div className="text-4xl mb-4">✉️</div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Check your email</h2>
+          <p className="text-sm text-gray-500 mb-1">A confirmation link has been sent to:</p>
+          <p className="text-sm font-semibold text-gray-800 mb-4">{email}</p>
+          <p className="text-xs text-gray-400 mb-6">Please open the link in your email to verify your account, then login.</p>
+          <p className="text-xs text-gray-400">Can't find it? Check your <span className="font-semibold">Junk / Spam</span> folder.</p>
+          <a href="/login" className="mt-6 block w-full py-3 rounded-xl text-white font-bold text-sm transition bg-red-700 hover:bg-red-800 text-center">
+            Go to Login
+          </a>
+        </div>
+      </div>
+    )
   }
 
   return (

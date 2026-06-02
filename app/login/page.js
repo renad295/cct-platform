@@ -1,14 +1,17 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { supabase } from "@/lib/supabase"
+import { useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const searchParams = useSearchParams()
+  const pending = searchParams.get("verified")
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -37,6 +40,12 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-1">CCT</h1>
           <p className="text-sm text-gray-400">Cold Calls Track Platform</p>
         </div>
+
+        {pending && (
+          <div className="bg-blue-50 text-blue-700 text-xs px-4 py-3 rounded-xl mb-4 text-center">
+            ✉️ Please verify your email before logging in. Check your inbox and Junk / Spam folder.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -88,5 +97,13 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
