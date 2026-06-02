@@ -78,8 +78,10 @@ export default function SignupPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="w-full max-w-md px-8 py-10 rounded-2xl shadow-lg border border-gray-100 text-center">
-          <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10 mx-auto mb-6" />
-          <div className="text-4xl mb-4">✉️</div>
+<div className="flex flex-col items-center mb-6">
+  <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10" />
+  <p className="mt-1 text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+</div>          <div className="text-4xl mb-4">✉️</div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Check your email</h2>
           <p className="text-sm text-gray-500 mb-1">A confirmation link has been sent to:</p>
           <p className="text-sm font-semibold text-gray-800 mb-4">{email}</p>
@@ -98,9 +100,10 @@ export default function SignupPage() {
       <div className="w-full max-w-md px-8 py-10 rounded-2xl shadow-lg border border-gray-100">
         
         <div className="text-center mb-8">
-          <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10 mx-auto mb-6" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Create Account</h1>
-          <p className="text-sm text-gray-400">CCT — Cold Calls Track Platform</p>
+<div className="flex flex-col items-center mb-6">
+  <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10" />
+  <p className="mt-1 text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+</div>          <h1 className="text-2xl font-bold text-gray-900 mb-1">Create Account</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -189,15 +189,19 @@ Write a performance summary covering: current performance level, key strengths, 
           <ArrowLeft size={16} /> Back to Dashboard
         </button>
 
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
-            <TrendingUp size={20} className="text-red-700" />
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">Performance Reports</h1>
-            <p className="text-xs text-gray-400">AI-powered cold calls analytics</p>
-          </div>
-        </div>
+     <div className="flex items-center gap-3 mb-8">
+  <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+    <TrendingUp size={20} className="text-red-700" />
+  </div>
+  <div>
+    <h1 className="text-lg font-semibold text-gray-900">Performance Reports</h1>
+    <p className="text-xs text-gray-400">AI-powered cold calls analytics</p>
+  </div>
+  <div className="flex flex-col items-center ml-auto">
+    <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-7" />
+    <p className="mt-1 text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+  </div>
+</div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-4 gap-4 mb-6">
@@ -205,8 +209,7 @@ Write a performance summary covering: current performance level, key strengths, 
             { label: "Total Clients", value: totalClients, color: "#111", sub: "all time" },
             { label: "Meeting Rate", value: `${overallMeetingRate}%`, color: "#0C447C", sub: `${totalMeetings} meetings` },
             { label: "Success Rate", value: `${overallSuccessRate}%`, color: "#27ae60", sub: "meetings + opportunities" },
-{ label: "Existing Clients", value: totalExisting, color: "#7c3aed", sub: `converted clients` },
-          ].map((s, i) => (
+{ label: "Existing Clients", value: totalExisting, color: "#7c3aed", sub: "already a client" },          ].map((s, i) => (
             <div key={i} className="bg-white rounded-xl p-4 border border-gray-100">
               <p className="text-xs text-gray-400 mb-1">{s.label}</p>
               <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>

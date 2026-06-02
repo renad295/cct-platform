@@ -365,7 +365,10 @@ export default function Dashboard() {
   <span className="block h-0.5 w-4 bg-gray-500"></span>
   <span className="block h-0.5 w-5 bg-gray-500"></span>
 </button>
-<img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-7" />
+<div className="flex flex-col items-center">
+  <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-7" />
+  <p className="mt-1 text-xs text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+</div>
         </div>
         <div className="flex items-center gap-3">
           <Notifications

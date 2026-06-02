@@ -108,10 +108,16 @@ export default function ImportClients() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-10 px-6">
-        <button onClick={() => router.push("/dashboard")}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-700 mb-6 transition">
-          <ArrowLeft size={16} /> Back to Dashboard
-        </button>
+        <div className="flex items-center justify-between mb-6">
+  <button onClick={() => router.push("/dashboard")}
+    className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-700 transition">
+    <ArrowLeft size={16} /> Back to Dashboard
+  </button>
+  <div className="flex flex-col items-center">
+    <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-7" />
+    <p className="mt-1 text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+  </div>
+</div>
 
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
           <h1 className="text-lg font-semibold text-gray-900 mb-2">Import Clients from CSV</h1>

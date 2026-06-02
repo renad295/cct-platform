@@ -34,10 +34,13 @@ export default function ForgotPassword() {
       <div className="w-full max-w-md px-8 py-10 rounded-2xl shadow-lg border border-gray-100">
         
         <div className="text-center mb-8">
-          <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10 mx-auto mb-6" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Forgot Password</h1>
-          <p className="text-sm text-gray-400">Enter your email to receive a reset link</p>
-        </div>
+  <div className="flex flex-col items-center mb-6">
+    <img src="https://smart.sa/wp-content/themes/smart/images/logo.svg" alt="SMART" className="h-10" />
+    <p className="mt-1 text-gray-900 tracking-widest" style={{ fontSize: "11px" }}>Cold Call Track</p>
+  </div>
+  <h1 className="text-2xl font-bold text-gray-900 mb-1">Forgot Password</h1>
+  <p className="text-sm text-gray-400">Enter your email to receive a reset link</p>
+</div>
 
         {sent ? (
           <div className="text-center space-y-4">
