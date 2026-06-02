@@ -6,6 +6,7 @@ export default function ClientTable({ clients, loading, onView, onEdit }) {
     const styles = {
       "New": "bg-gray-100 text-gray-600",
       "Call Back": "bg-cyan-50 text-cyan-700",
+        "On Hold": "bg-orange-50 text-orange-700",
       "Meeting Arranged": "bg-blue-50 text-blue-800",
       "Opportunity": "bg-green-50 text-green-800",
       "No Answer": "bg-amber-50 text-amber-800",

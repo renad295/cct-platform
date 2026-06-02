@@ -34,6 +34,7 @@ export default function Reports() {
   const worked = assigned.filter(c => c.status !== "New") // فقط اللي شتغل عليهم
   const total = worked.length
   const meetings = worked.filter(c => c.status === "Meeting Arranged").length
+    const onHold = worked.filter(c => c.status === "On Hold").length
   const opportunities = worked.filter(c => c.status === "Opportunity").length
   const notInterested = worked.filter(c => c.status === "Not Interested").length
   const noAnswer = worked.filter(c => c.status === "No Answer").length
@@ -106,6 +107,7 @@ Write a performance summary covering: current performance level, key strengths, 
   const pieData = [
     { name: "New", value: totalNew, color: "#9ca3af" },
     { name: "Meeting Arranged", value: totalMeetings, color: "#0C447C" },
+      { name: "On Hold", value: totalOnHold, color: "#f9f516" },
     { name: "Opportunity", value: totalOpportunities, color: "#27ae60" },
     { name: "No Answer", value: totalNoAnswer, color: "#f59e0b" },
     { name: "Not Interested", value: totalNotInterested, color: "#ef4444" },
