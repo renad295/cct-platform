@@ -68,7 +68,8 @@ const fetchUsers = async () => {
     setSending(false)
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`, {
+ const handleDelete = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: confirmDelete.id }),
