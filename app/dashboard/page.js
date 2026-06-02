@@ -10,6 +10,8 @@ import ClientTable from "./components/ClientTable"
 import Notifications from "./components/Notifications"
 import ViewModal from "./components/ViewModal"
 import EditModal from "./components/EditModal"
+import { Moon, Sun } from "lucide-react"
+import { useDarkMode } from "@/lib/useDarkMode"
 
 export default function Dashboard() {
   const [clients, setClients] = useState([])
@@ -38,6 +40,7 @@ export default function Dashboard() {
   const [openedFromNotif, setOpenedFromNotif] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
+  const { isDark, toggle } = useDarkMode()
   const notifRef = useRef(null)
 
   useEffect(() => {
@@ -350,8 +353,8 @@ export default function Dashboard() {
   const filters = ["All", "New","Call Back", "Meeting Arranged", "Opportunity", "No Answer", "Not Interested", "Existing Client"]
 
  return (
-  <div className="flex h-screen bg-gray-50">
-    <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} onLogout={handleLogout} />
+<div className="flex h-screen bg-gray-50"> 
+   <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} onLogout={handleLogout} />
 
     <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${sidebarOpen ? "ml-52" : "ml-0"}`}>
       
@@ -371,6 +374,9 @@ export default function Dashboard() {
 </div>
         </div>
         <div className="flex items-center gap-3">
+          <button onClick={toggle} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+  {isDark ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-gray-500" />}
+</button>
           <Notifications
             notifications={notifications}
             showNotifications={showNotifications}
