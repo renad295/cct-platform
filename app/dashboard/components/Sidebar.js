@@ -7,15 +7,6 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen, onLogout })
 
   return (
     <>
-      {/* Toggle Button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-4 left-4 z-50 flex flex-col justify-center gap-1.5 p-2">
-        <span className="block h-0.5 w-6 bg-gray-500"></span>
-        <span className="block h-0.5 w-4 bg-gray-500"></span>
-        <span className="block h-0.5 w-5 bg-gray-500"></span>
-      </button>
-
       {/* Overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/20 z-30" onClick={() => setSidebarOpen(false)} />
@@ -38,7 +29,7 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen, onLogout })
           </div>
           <div onClick={() => { router.push("/dashboard/invitations"); setSidebarOpen(false) }}
             className="flex items-center gap-3 px-5 py-3 text-gray-500 hover:text-red-700 hover:bg-red-50 font-medium text-sm cursor-pointer transition">
-            <Mail size={16} /> Invitations
+            <Mail size={16} /> Users / Invitations
           </div>
         </nav>
         <div className="p-4 border-t border-gray-100">

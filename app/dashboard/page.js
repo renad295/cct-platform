@@ -349,106 +349,113 @@ export default function Dashboard() {
 
   const filters = ["All", "New","Call Back", "Meeting Arranged", "Opportunity", "No Answer", "Not Interested", "Existing Client"]
 
-  return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} onLogout={handleLogout} />
+ return (
+  <div className="flex h-screen bg-gray-50">
+    <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} onLogout={handleLogout} />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-6 flex-1 overflow-y-auto">
-
-          {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-lg font-semibold text-gray-900 pl-10">Clients</h1>
-            <div className="flex items-center gap-3">
-              <Notifications
-                notifications={notifications}
-                showNotifications={showNotifications}
-                setShowNotifications={setShowNotifications}
-                onRead={markNotificationRead}
-                onMarkAllRead={markAllRead}
-                notifRef={notifRef}
-              />
-              <button onClick={() => router.push("/dashboard/add-client")}
-                className="flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-                <Plus size={16} /> Add Client
-              </button>
-            </div>
-          </div>
-
-          <StatsCards stats={stats} />
-
-          <Filters
-            filters={filters}
-            filter={filter} setFilter={setFilter}
-            userFilter={userFilter} setUserFilter={setUserFilter}
-            assignedFilter={assignedFilter} setAssignedFilter={setAssignedFilter}
-            dateFrom={dateFrom} setDateFrom={setDateFrom}
-            dateTo={dateTo} setDateTo={setDateTo}
-            allUsers={allUsers} allAssigned={allAssigned}
-            filteredCount={filtered.length}
-            search={search} setSearch={setSearch}
-            onReset={() => { setFilter("All"); setUserFilter("All"); setAssignedFilter("All"); setDateFrom(""); setDateTo(""); setSearch("") }}
+    <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${sidebarOpen ? "ml-52" : "ml-0"}`}>
+      
+      {/* Header ثابت */}
+      <div className="fixed top-0 left-0 right-0 z-20 bg-gray-50 px-6 py-4 flex justify-between items-center border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="flex flex-col justify-center gap-1.5 p-2">
+            <span className="block h-0.5 w-6 bg-gray-500"></span>
+            <span className="block h-0.5 w-4 bg-gray-500"></span>
+            <span className="block h-0.5 w-5 bg-gray-500"></span>
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900">Clients</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <Notifications
+            notifications={notifications}
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            onRead={markNotificationRead}
+            onMarkAllRead={markAllRead}
+            notifRef={notifRef}
           />
-
-          <ClientTable
-            clients={filtered}
-            loading={loading}
-            onView={openView}
-            onEdit={openEdit}
-          />
+          <button onClick={() => router.push("/dashboard/add-client")}
+            className="flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+            <Plus size={16} /> Add Client
+          </button>
         </div>
       </div>
 
-      <ViewModal
-        client={viewClient}
-        files={files}
-        history={history}
-        onClose={() => setViewClient(null)}
-      />
+      {/* Content */}
+      <div className="p-6 flex-1 overflow-y-auto mt-16">
+        <StatsCards stats={stats} />
+        <Filters
+          filters={filters}
+          filter={filter} setFilter={setFilter}
+          userFilter={userFilter} setUserFilter={setUserFilter}
+          assignedFilter={assignedFilter} setAssignedFilter={setAssignedFilter}
+          dateFrom={dateFrom} setDateFrom={setDateFrom}
+          dateTo={dateTo} setDateTo={setDateTo}
+          allUsers={allUsers} allAssigned={allAssigned}
+          filteredCount={filtered.length}
+          search={search} setSearch={setSearch}
+          onReset={() => { setFilter("All"); setUserFilter("All"); setAssignedFilter("All"); setDateFrom(""); setDateTo(""); setSearch("") }}
+        />
+        <ClientTable
+          clients={filtered}
+          loading={loading}
+          onView={openView}
+          onEdit={openEdit}
+        />
+      </div>
+    </div>
 
-      <EditModal
-        client={selectedClient}
-        editedClient={editedClient}
-        handleChange={handleChange}
-        handleSave={confirmSave}
-        handleClose={handleClose}
-        handleConfirm={handleConfirm}
-        saving={saving}
-        uploading={uploading}
-        isDirty={isDirty}
-        openedFromNotif={openedFromNotif}
-        user={user}
-        users={users}
-        tasks={tasks}
-        newTask={newTask}
-        setNewTask={setNewTask}
-        addTask={addTask}
-        files={files}
-        handleFileUpload={handleFileUpload}
-        history={history}
-        setEditedClient={setEditedClient}
-        setIsDirty={setIsDirty}
-      />
+    <ViewModal
+      client={viewClient}
+      files={files}
+      history={history}
+      onClose={() => setViewClient(null)}
+    />
 
-      {/* Confirm Close */}
-      {showConfirmClose && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 w-80 shadow-xl">
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">Unsaved Changes</h3>
-            <p className="text-xs text-gray-500 mb-5">You have unsaved changes. What would you like to do?</p>
-            <div className="flex gap-3">
-              <button onClick={() => { setShowConfirmClose(false); setSelectedClient(null); setEditedClient(null); setIsDirty(false); setOpenedFromNotif(false) }}
-                className="flex-1 py-2 rounded-xl border border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition">
-                Discard
-              </button>
-              <button onClick={() => { setShowConfirmClose(false); confirmSave() }}
-                className="flex-1 py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition">
-                Save
-              </button>
-            </div>
+    <EditModal
+      client={selectedClient}
+      editedClient={editedClient}
+      handleChange={handleChange}
+      handleSave={confirmSave}
+      handleClose={handleClose}
+      handleConfirm={handleConfirm}
+      saving={saving}
+      uploading={uploading}
+      isDirty={isDirty}
+      openedFromNotif={openedFromNotif}
+      user={user}
+      users={users}
+      tasks={tasks}
+      newTask={newTask}
+      setNewTask={setNewTask}
+      addTask={addTask}
+      files={files}
+      handleFileUpload={handleFileUpload}
+      history={history}
+      setEditedClient={setEditedClient}
+      setIsDirty={setIsDirty}
+    />
+
+    {showConfirmClose && (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-2xl p-6 w-80 shadow-xl">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Unsaved Changes</h3>
+          <p className="text-xs text-gray-500 mb-5">You have unsaved changes. What would you like to do?</p>
+          <div className="flex gap-3">
+            <button onClick={() => { setShowConfirmClose(false); setSelectedClient(null); setEditedClient(null); setIsDirty(false); setOpenedFromNotif(false) }}
+              className="flex-1 py-2 rounded-xl border border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition">
+              Discard
+            </button>
+            <button onClick={() => { setShowConfirmClose(false); confirmSave() }}
+              className="flex-1 py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition">
+              Save
+            </button>
           </div>
         </div>
-      )}
-    </div>
-  )
+      </div>
+    )}
+  </div>
+)
 }
