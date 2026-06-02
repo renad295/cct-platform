@@ -14,13 +14,25 @@ export default function ResetPassword() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-  const hash = window.location.hash
-  const params = new URLSearchParams(hash.replace("#", "?"))
-  const accessToken = params.get("access_token")
-  const refreshToken = params.get("refresh_token")
-  const type = params.get("type")
+  // أولاً جرب query params (PKCE - الطريقة الجديدة)
+  const searchParams = new URLSearchParams(window.location.search)
+  const code = searchParams.get("code")
 
-  if (accessToken) {
+  // ثانياً جرب hash (الطريقة القديمة)
+  const hash = window.location.hash
+  const hashParams = new URLSearchParams(hash.replace("#", "?"))
+  const accessToken = hashParams.get("access_token")
+  const refreshToken = hashParams.get("refresh_token")
+
+  if (code) {
+    // PKCE flow - Supabase يتعامل معه تلقائياً
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) setError(error.message)
+      else if (session) setReady(true)
+      else setError("Invalid or expired reset link.")
+    })
+  } else if (accessToken) {
+    // Legacy hash flow
     supabase.auth.setSession({
       access_token: accessToken,
       refresh_token: refreshToken || accessToken,
@@ -29,7 +41,6 @@ export default function ResetPassword() {
       else setReady(true)
     })
   } else {
-    // ممكن Supabase يرسل PKCE بدون hash
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) setReady(true)
       else setError("Invalid or expired reset link.")
@@ -143,7 +154,7 @@ export default function ResetPassword() {
             <div className="text-4xl mb-3">✅</div>
             <h3 className="text-sm font-semibold text-gray-900 mb-2">Password Changed!</h3>
             <p className="text-xs text-gray-500 mb-5">Your password has been updated successfully.</p>
-            <p className="text-sm font-semibold text-red-600 mb-5">توجع راسي وكل شوي تنسى الباسورد.</p>
+            <p className="text-sm font-semibold text-red-600 mb-5">لا توجع راسي و كل شويا تنسى الباسورد</p>
             <a href="/login"
               className="block w-full py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition text-center">
               Go to Login

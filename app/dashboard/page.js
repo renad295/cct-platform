@@ -3,15 +3,14 @@ import { useState, useEffect, useRef } from "react"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { Plus } from "lucide-react"
-import Sidebar from "./components/Sidebar"
-import StatsCards from "./components/StatsCards"
-import Filters from "./components/Filters"
-import ClientTable from "./components/ClientTable"
-import Notifications from "./components/Notifications"
-import ViewModal from "./components/ViewModal"
-import EditModal from "./components/EditModal"
 import { Moon, Sun } from "lucide-react"
-import { useDarkMode } from "@/lib/useDarkMode"
+import { useDarkMode } from "@/lib/hooks/useDarkMode"
+import Sidebar from "@/components/dashboard/Sidebar"
+import Filters from "@/components/dashboard/Filters"
+import ClientTable from "@/components/dashboard/ClientTable"
+import Notifications from "@/components/dashboard/Notifications"
+import ViewModal from "@/components/dashboard/ViewModal"
+import EditModal from "@/components/dashboard/EditModal"
 
 export default function Dashboard() {
   const [clients, setClients] = useState([])
@@ -87,11 +86,10 @@ export default function Dashboard() {
   }
 
   const fetchUsersData = async () => {
-const fetchUsersData = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`)
   const data = await res.json()
   setUsers(data.users || [])
-}  }
+}
 
   const fetchHistory = async (clientId) => {
     const { data } = await supabase.from("client_history").select("*").eq("client_id", clientId).order("created_at", { ascending: false })
