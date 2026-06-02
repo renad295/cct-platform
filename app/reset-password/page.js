@@ -142,8 +142,8 @@ export default function ResetPassword() {
           <div className="bg-white rounded-2xl p-6 w-80 shadow-xl text-center">
             <div className="text-4xl mb-3">✅</div>
             <h3 className="text-sm font-semibold text-gray-900 mb-2">Password Changed!</h3>
-            <p className="text-xs text-gray-500 mb-5">Your password has been updated successfully
-              لا توجع راسي وكل شويا تنسى الباسورد.</p>
+            <p className="text-xs text-gray-500 mb-5">Your password has been updated successfully.</p>
+            <p className="text-sm font-semibold text-red-600 mb-5">توجع راسي وكل شوي تنسى الباسورد.</p>
             <a href="/login"
               className="block w-full py-2 rounded-xl bg-red-700 hover:bg-red-800 text-white text-sm font-medium transition text-center">
               Go to Login
