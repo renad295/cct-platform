@@ -8,9 +8,10 @@ export default function ClientTable({ clients, loading, onView, onEdit }) {
       "Call Back": "bg-cyan-50 text-cyan-700",
         "On Hold": "bg-orange-50 text-orange-700",
       "Meeting Arranged": "bg-blue-50 text-blue-800",
+      "Qualified": "bg-green-50 text-green-700",
+"Not Qualified": "bg-red-50 text-red-700",
       "Opportunity": "bg-green-50 text-green-800",
       "No Answer": "bg-amber-50 text-amber-800",
-      "Not Interested": "bg-red-50 text-red-700",
       "Existing Client": "bg-purple-50 text-purple-800",
     }
     return styles[status] || "bg-gray-100 text-gray-600"
