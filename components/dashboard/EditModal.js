@@ -28,12 +28,21 @@ export default function EditModal({
             <p className="text-xs text-gray-400">{editedClient?.company_name}</p>
           </div>
           <div className="flex items-center gap-3">
-            {!editedClient?.is_confirmed && editedClient?.assigned_to_email === user?.email && (
-              <button onClick={handleConfirm}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
-                ✅ Confirm
-              </button>
-            )}
+            {editedClient?.assigned_to_email === user?.email && (
+  editedClient?.is_confirmed ? (
+    <div className="flex items-center gap-2 bg-green-100 text-green-700 text-xs font-medium px-4 py-2 rounded-lg">
+      ✅ Confirmed
+    </div>
+  ) : (
+    <button
+      onClick={handleConfirm}
+      className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition"
+    >
+      ✅ Confirm
+    </button>
+  )
+)}
+
             <button onClick={handleSave} disabled={saving}
               className="flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
               <Save size={13} /> {saving ? "Saving..." : "Save Changes"}
@@ -62,7 +71,53 @@ export default function EditModal({
                       className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900 outline-none focus:border-red-700 focus:ring-1 focus:ring-red-200" />
                   </div>
                 ))}
+<div>
+  <label className="block text-xs text-gray-400 mb-1">Source</label>
+  <select
+    name="source"
+    value={editedClient?.source || ""}
+    onChange={handleChange}
+    className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900"
+  >
+    <option value="">Select Source</option>
+    <option value="Apollo">Apollo</option>
+    <option value="Event">Event</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
 
+<div>
+  <label className="block text-xs text-gray-400 mb-1">City</label>
+  <input
+    name="city"
+    value={editedClient?.city || ""}
+    onChange={handleChange}
+    className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900"
+  />
+</div>
+
+<div className="flex items-center gap-3 mt-4">
+  <input
+    type="checkbox"
+    id="profile_sent"
+    checked={editedClient?.profile_sent || false}
+    onChange={(e) => {
+      setEditedClient({
+        ...editedClient,
+        profile_sent: e.target.checked
+      })
+      setIsDirty(true)
+    }}
+    className="h-4 w-4"
+  />
+
+  <label
+    htmlFor="profile_sent"
+    className="text-sm text-gray-700"
+  >
+    Profile Sent
+  </label>
+</div>
                 <div>
                   <label className="block text-xs text-gray-400 mb-1">Status</label>
                   <select name="status" value={editedClient?.status || "New"} onChange={handleChange}

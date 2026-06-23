@@ -12,6 +12,7 @@ export default function AddClient() {
     client_phone: "",
     client_email: "",
     job_title: "",
+    source: "Apollo",
     notes: "",
     status: "New",
   })
@@ -125,6 +126,24 @@ export default function AddClient() {
     <option>Other</option>
   </select>
 </div>
+
+<div>
+  <label className="block text-xs text-gray-400 mb-1">
+    Lead Source
+  </label>
+
+  <select
+    name="source"
+    value={form.source}
+    onChange={handleChange}
+    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-900 outline-none focus:border-red-700 focus:ring-1 focus:ring-red-200"
+  >
+    <option value="Apollo">Apollo</option>
+    <option value="Event">Event</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
             <div>
               <label className="block text-xs text-gray-400 mb-1">Phone</label>
               <input

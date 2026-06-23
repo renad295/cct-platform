@@ -26,6 +26,8 @@ export default function Reports() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [analysis, setAnalysis] = useState("");
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [employeePeriod, setEmployeePeriod] = useState("all")
   const router = useRouter();
 
   useEffect(() => {
@@ -33,14 +35,74 @@ export default function Reports() {
   }, []);
 
   const fetchData = async () => {
-    const { data: clientsData } = await supabase.from("clients").select("*");
+const { data: clientsData } =
+  await supabase.from("clients").select("*")
+
+const { data: historyData } =
+  await supabase.from("client_history").select("*")
+
+setClients(clientsData || [])
+setHistory(historyData || [])
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/invite`);
     const usersData = await res.json();
     setClients(clientsData || []);
     setUsers(usersData.users || []);
     setLoading(false);
   };
+const getEmployeeFunnel = (email) => {
+  const assignedClients = clients.filter(
+    c => c.assigned_to_email === email
+  )
 
+  const assignedIds = assignedClients.map(c => c.id)
+
+  const employeeHistory = history.filter(h =>
+    assignedIds.includes(h.client_id)
+  )
+
+  const confirmedAssigned = assignedClients.filter(
+    c => c.is_confirmed
+  ).length
+
+  const meetings = new Set(
+    employeeHistory
+      .filter(h => h.action?.includes("status → Meeting Arranged"))
+      .map(h => h.client_id)
+  ).size
+
+  const qualified = new Set(
+    employeeHistory
+      .filter(h => h.action?.includes("status → Qualified"))
+      .map(h => h.client_id)
+  ).size
+
+  const opportunities = new Set(
+    employeeHistory
+      .filter(h => h.action?.includes("status → Opportunity"))
+      .map(h => h.client_id)
+  ).size
+
+  return {
+    confirmedAssigned,
+    meetings,
+    qualified,
+    opportunities,
+    meetingRate:
+      confirmedAssigned > 0
+        ? ((meetings / confirmedAssigned) * 100).toFixed(1)
+        : 0,
+
+    qualificationRate:
+      meetings > 0
+        ? ((qualified / meetings) * 100).toFixed(1)
+        : 0,
+
+    opportunityRate:
+      qualified > 0
+        ? ((opportunities / qualified) * 100).toFixed(1)
+        : 0,
+  }
+}
   const getEmployeeStats = (userEmail) => {
     const assigned = clients.filter((c) => c.assigned_to_email === userEmail);
     const newClients = assigned.filter((c) => c.status === "New").length;
@@ -258,8 +320,14 @@ Write a performance summary covering: current performance level, key strengths, 
     .sort((a, b) => b.stats.opportunities - a.stats.opportunities);
 
   const openModal = (user) => {
-    const stats = getEmployeeStats(user.email);
-    setSelectedUser({ user, stats });
+    const stats = getEmployeeStats(user.email)
+const funnel = getEmployeeFunnel(user.email)
+
+setSelectedUser({
+  user,
+  stats,
+  funnel,
+})
     setAnalysis("");
     getAIAnalysis(user, stats);
   };
@@ -658,52 +726,70 @@ Write a performance summary covering: current performance level, key strengths, 
             </div>
 
             <div className="p-6 space-y-5">
+              <div className="flex justify-end">
+  <select
+    value={employeePeriod}
+    onChange={(e) => setEmployeePeriod(e.target.value)}
+    className="px-3 py-2 border border-gray-200 rounded-xl text-sm"
+  >
+    <option value="24h">Last 24 Hours</option>
+    <option value="7d">Last 7 Days</option>
+    <option value="30d">Last 30 Days</option>
+    <option value="all">All Time</option>
+  </select>
+</div>
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  {
-                    label: "Total",
-                    value: selectedUser.stats.total,
-                    color: "text-gray-900",
-                    bg: "bg-gray-50",
-                  },
-                  {
-                    label: "Meetings",
-                    value: selectedUser.stats.meetings,
-                    color: "text-blue-700",
-                    bg: "bg-blue-50",
-                  },
-                  {
-                    label: "Qualified",
-                    value: selectedUser.stats.qualified,
-                    color: "text-green-600",
-                    bg: "bg-green-50",
-                  },
-                  {
-                    label: "Not Qualified",
-                    value: selectedUser.stats.notQualified,
-                    color: "text-red-600",
-                    bg: "bg-red-50",
-                  },
-                  {
-                    label: "Opportunities",
-                    value: selectedUser.stats.opportunities,
-                    color: "text-green-700",
-                    bg: "bg-green-50",
-                  },
-                  {
-                    label: "No Answer",
-                    value: selectedUser.stats.noAnswer,
-                    color: "text-amber-600",
-                    bg: "bg-amber-50",
-                  },
-                  {
-                    label: "Success Rate",
-                    value: `${selectedUser.stats.successRate}%`,
-                    color: "text-purple-700",
-                    bg: "bg-purple-50",
-                  },
-                ].map((s, i) => (
+  {
+    label: "Assigned",
+    value: selectedUser.stats.totalAssigned,
+    color: "text-gray-900",
+    bg: "bg-gray-50",
+  },
+  {
+    label: "Confirmed",
+    value: selectedUser.funnel.confirmedAssigned,
+    color: "text-blue-700",
+    bg: "bg-blue-50",
+  },
+  {
+    label: "Meetings",
+    value: selectedUser.funnel.meetings,
+    color: "text-indigo-700",
+    bg: "bg-indigo-50",
+  },
+  {
+    label: "Qualified",
+    value: selectedUser.funnel.qualified,
+    color: "text-cyan-700",
+    bg: "bg-cyan-50",
+  },
+  {
+    label: "Opportunities",
+    value: selectedUser.funnel.opportunities,
+    color: "text-green-700",
+    bg: "bg-green-50",
+  },
+  {
+    label: "Meeting Rate",
+    value: `${selectedUser.funnel.meetingRate}%`,
+    color: "text-purple-700",
+    bg: "bg-purple-50",
+  },
+  {
+    label: "Qualification Rate",
+    value: `${selectedUser.funnel.qualificationRate}%`,
+    color: "text-orange-700",
+    bg: "bg-orange-50",
+  },
+  {
+    label: "Opportunity Rate",
+    value: `${selectedUser.funnel.opportunityRate}%`,
+    color: "text-emerald-700",
+    bg: "bg-emerald-50",
+  },
+].map((s, i) => (
                   <div key={i} className={`${s.bg} rounded-xl p-3 text-center`}>
                     <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
                     <p className="text-xs text-gray-400">{s.label}</p>

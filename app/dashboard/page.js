@@ -38,6 +38,8 @@ export default function Dashboard() {
   const [newTask, setNewTask] = useState({ title: "", scheduled_at: "" })
   const [openedFromNotif, setOpenedFromNotif] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+const itemsPerPage = 25
   const router = useRouter()
   const { isDark, toggle } = useDarkMode()
   const notifRef = useRef(null)
@@ -147,10 +149,15 @@ export default function Dashboard() {
     if (client) openEdit(client, true)
   }
 
-  const markAllRead = async () => {
-    await supabase.from("notifications").update({ is_read: true }).eq("user_email", user.email).eq("is_read", false)
-    fetchNotifications()
-  }
+const markAllRead = async () => {
+  await supabase
+    .from("notifications")
+    .update({ is_opened: true })
+    .eq("user_email", user.email)
+    .eq("is_opened", false)
+
+  fetchNotifications()
+}
 
   const openEdit = async (client, fromNotif = false) => {
     setSelectedClient(client)
@@ -206,9 +213,13 @@ export default function Dashboard() {
     }])
 
     await fetchClients()
-    setSelectedClient(null)
-    setEditedClient(null)
-    setOpenedFromNotif(false)
+
+setEditedClient({
+  ...editedClient,
+  is_confirmed: true,
+  confirmed_by: userName,
+  confirmed_at: new Date().toISOString(),
+})
   }
 
   const confirmSave = async () => {
@@ -229,11 +240,14 @@ export default function Dashboard() {
 
     const action = changes.length > 0 ? `Updated: ${changes.join(", ")}` : "Updated client info"
 
-    await supabase.from("clients").update({
-      ...editedClient,
-      updated_by: userName,
-      updated_at: new Date().toISOString(),
-    }).eq("id", editedClient.id)
+await supabase.from("clients").update({
+  ...editedClient,
+  is_confirmed: true,
+  confirmed_by: userName,
+  confirmed_at: new Date().toISOString(),
+  updated_by: userName,
+  updated_at: new Date().toISOString(),
+}).eq("id", editedClient.id)
 
     const historyEntries = [{ client_id: editedClient.id, action, changed_by: userName, changed_by_email: user?.email }]
     if (oldNotes !== newNotes) {
@@ -342,6 +356,13 @@ export default function Dashboard() {
     return statusMatch && userMatch && assignedMatch && searchMatch && dateMatch
   })
 
+  const totalPages = Math.ceil(filtered.length / itemsPerPage)
+
+const paginatedClients = filtered.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+)
+
   const stats = [
     { label: "Total Clients", value: filtered.length, color: "#111" },
     { label: "Meeting Arranged", value: filtered.filter(c => c.status === "Meeting Arranged").length, color: "#0C447C" },
@@ -406,20 +427,55 @@ const filters = ["All", "New", "Call Back", "Meeting Arranged", "Opportunity", "
           onReset={() => { setFilter("All"); setUserFilter("All"); setAssignedFilter("All"); setDateFrom(""); setDateTo(""); setSearch("") }}
         />
         <ClientTable
-          clients={filtered}
-          loading={loading}
-          onView={openView}
-          onEdit={openEdit}
-        />
+  clients={paginatedClients}
+  loading={loading}
+  onView={openView}
+  onEdit={openEdit}
+/>
+<div className="flex items-center justify-center gap-2 mt-4">
+  <button
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage(currentPage - 1)}
+    className="px-3 py-1 border rounded disabled:opacity-50"
+  >
+    Previous
+  </button>
+
+  {Array.from({ length: totalPages }, (_, i) => (
+    <button
+      key={i + 1}
+      onClick={() => setCurrentPage(i + 1)}
+      className={`px-3 py-1 rounded ${
+        currentPage === i + 1
+          ? "bg-red-700 text-white"
+          : "border"
+      }`}
+    >
+      {i + 1}
+    </button>
+  ))}
+
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(currentPage + 1)}
+    className="px-3 py-1 border rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
       </div>
     </div>
 
     <ViewModal
-      client={viewClient}
-      files={files}
-      history={history}
-      onClose={() => setViewClient(null)}
-    />
+  client={viewClient}
+  files={files}
+  history={history}
+  onClose={() => setViewClient(null)}
+  onEdit={(client) => {
+    setViewClient(null)
+    openEdit(client)
+  }}
+/>
 
     <EditModal
       client={selectedClient}

@@ -1,7 +1,6 @@
 import { X, Clock } from "lucide-react"
 
-export default function ViewModal({ client, files, history, onClose }) {
-  if (!client) return null
+export default function ViewModal({ client, files, history, onClose, onEdit }) {  if (!client) return null
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -11,9 +10,22 @@ export default function ViewModal({ client, files, history, onClose }) {
             <h2 className="text-base font-semibold text-gray-900">{client.client_name}</h2>
             <p className="text-xs text-gray-400">{client.company_name}</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-3">
+  <button
+    onClick={() => onEdit(client)}
+    className="bg-red-700 hover:bg-red-800 text-white text-xs font-medium px-4 py-2 rounded-lg transition"
+  >
+    Edit
+  </button>
+
+  <button
+    onClick={onClose}
+    className="text-gray-400 hover:text-gray-600 transition"
+  >
+    <X size={20} />
+  </button>
+</div>
+          
         </div>
 
         <div className="flex overflow-hidden flex-1">
@@ -28,6 +40,13 @@ export default function ViewModal({ client, files, history, onClose }) {
                 { label: "Email", value: client.client_email || "-" },
                 { label: "Status", value: client.status },
                 { label: "Assigned To", value: client.assigned_to || "-" },
+                { label: "Source", value: client.source || "-" },
+               {
+  label: "Confirmation",
+  value: client.is_confirmed ? "Confirmed" : "Pending"
+},
+                { label: "City", value: client.city || "-" },
+                { label: "Profile Sent", value: client.profile_sent ? "Yes" : "No" },
                 { label: "Industry", value: client.industry || "-" },
               ].map((f, i) => (
                 <div key={i} className="bg-gray-50 rounded-xl p-3">

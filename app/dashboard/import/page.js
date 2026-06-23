@@ -12,6 +12,8 @@ const CCT_FIELDS = [
   { key: "client_phone", label: "Phone", required: false },
   { key: "other_phone", label: "Other Phone", required: false },
   { key: "client_email", label: "Email", required: false },
+  { key: "city", label: "City", required: false },
+  { key: "source", label: "Source", required: false },
   { key: "industry", label: "Industry", required: false },
   { key: "notes", label: "Notes", required: false },
 ]
@@ -83,7 +85,12 @@ export default function ImportClients() {
     const userName = user?.email?.split("@")[0]
 
     const rows = csvData.map(row => {
-      const mapped = { status: "New", created_by: userName}
+const mapped = {
+  status: "New",
+  source: "Apollo",
+  created_by: userName,
+  updated_by: userName,
+}
       CCT_FIELDS.forEach(field => {
         const col = mapping[field.key]
         if (!col) return
@@ -94,14 +101,37 @@ export default function ImportClients() {
           mapped[field.key] = row[col] || ""
         }
       })
+      if (!mapped.source) {
+  mapped.source = "Apollo"
+}
       return mapped
     })
 
-    const { error } = await supabase.from("clients").insert(rows)
-    if (!error) {
-      setImported(rows.length)
-      setStep(3)
-    }
+// جلب العملاء الموجودين
+const { data: existingClients } = await supabase
+  .from("clients")
+  .select("client_email, client_phone")
+
+// استبعاد المكررين
+const uniqueRows = rows.filter(row => {
+  return !existingClients?.some(client =>
+    (row.client_email &&
+      client.client_email &&
+      row.client_email.toLowerCase() === client.client_email.toLowerCase()) ||
+    (row.client_phone &&
+      client.client_phone &&
+      row.client_phone === client.client_phone)
+  )
+})
+
+// إدخال غير المكرر فقط
+const { error } = await supabase
+  .from("clients")
+  .insert(uniqueRows)
+      if (!error) {
+  setImported(uniqueRows.length)
+  setStep(3)
+}
     setImporting(false)
   }
 
